@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TO DO LIST</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #41295a, #2F0743);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* Background light circles */
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.4;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite alternate;
+    }
+
+    .circle1 { width: 300px; height: 300px; top: -100px; left: -100px; background: #00c6ff; }
+    .circle2 { width: 350px; height: 350px; bottom: -100px; right: -100px; background: #ff7eb3; }
+
+    @keyframes float {
+      from { transform: translateY(0px); }
+      to { transform: translateY(25px); }
+    }
+
+    .todo-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(25px);
+      border-radius: 25px;
+      padding: 40px;
+      width: 900px;
+      max-width: 95%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+    }
+
+    .todo-wrapper:hover {
+      transform: translateY(-5px);
+      transition: 0.3s ease;
+    }
+
+    .illustration {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .illustration img {
+      width: 100%;
+      max-width: 350px;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+      animation: bounce 3s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .todo-card {
+      flex: 1;
+      text-align: center;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 32px;
+      background: linear-gradient(90deg, #00fff2, #ffb6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 15px #00fff2;
+    }
+
+    .btn-add {
+      background: linear-gradient(90deg, #8360c3, #2ebf91);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-add:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.7);
+      transform: scale(1.05);
+    }
+
+    .list-group-item {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #fff;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .list-group-item.completed {
+      text-decoration: line-through;
+      color: #00fff2aa;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-action {
+      background: none;
+      border: none;
+      color: #00fff2;
+      font-size: 1.3rem;
+      transition: 0.2s;
+    }
+
+    .btn-action:hover {
+      color: #ffb6ff;
+      transform: scale(1.2);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      text-align: center;
+      width: 100%;
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="circle circle1"></div>
+  <div class="circle circle2"></div>
+
+  <div class="todo-wrapper">
+    <div class="illustration">
+      <img src="https://cdn-icons-png.flaticon.com/512/2210/2210120.png" alt="Task Image">
+    </div>
+
+    <div class="todo-card">
+      <h1><i class="bi bi-stars"></i> TO DO LIST</h1>
+
+      <div class="input-group mb-4">
+        <input type="text" id="taskInput" class="form-control" placeholder="🌈 Write your next goal..." />
+        <button class="btn btn-add" onclick="addTask()">Add</button>
+      </div>
+
+      <ul id="taskList" class="list-group"></ul>
+    </div>
+  </div>
+
+  <footer>© 2025 todo List | Designed by hiba khan💜</footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    document.addEventListener('DOMContentLoaded', loadTasks);
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      if (taskText === '') return;
+
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.innerHTML = `
+        <span>${taskText}</span>
+        <div>
+          <button class="btn-action" onclick="toggleComplete(this)"><i class="bi bi-check2-circle"></i></button>
+          <button class="btn-action" onclick="deleteTask(this)"><i class="bi bi-trash"></i></button>
+        </div>
+      `;
+
+      taskList.appendChild(li);
+      saveTasks();
+      taskInput.value = '';
+    }
+
+    function toggleComplete(btn) {
+      const li = btn.closest('li');
+      li.classList.toggle('completed');
+      saveTasks();
+    }
+
+    function deleteTask(btn) {
+      const li = btn.closest('li');
+      li.remove();
+      saveTasks();
+    }
+
+    function saveTasks() {
+      const tasks = [];
+      document.querySelectorAll('#taskList li').forEach(li => {
+        tasks.push({
+          text: li.querySelector('span').textContent,
+          completed: li.classList.contains('completed')
+        });
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.forEach(t => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item' + (t.completed ? ' completed' : '');
+        li.innerHTML = `
+          <span>${t.text}</span>
+          <div>
+            <button class="btn-action" onclick="toggleComplete(this)"><i class="bi bi-check2-circle"></i></button>
+            <button class="btn-action" onclick="deleteTask(this)"><i class="bi bi-trash"></i></button>
+          </div>
+        `;
+        taskList.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
